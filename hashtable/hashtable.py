@@ -107,7 +107,7 @@ class HashTable:
         """
         # Your code here
         if self.hash_index(key) is None:
-            print("key not found")
+            print("Key not found")
         else:
             hash = self.hash_index(key)
             self.hash_table[hash] = None
@@ -169,9 +169,7 @@ if __name__ == "__main__":
 
     # Test resizing
     old_capacity = ht.get_num_slots()
-    print(ht.capacity * 2)
     ht.resize(ht.capacity * 2)
-    print("Length: " + str(len(ht.hash_table)))
     new_capacity = ht.get_num_slots()
 
     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
