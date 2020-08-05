@@ -1,3 +1,77 @@
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def __str__(self):
+        if self.head is None:
+            return "[Empty List]"
+
+        cur = self.head
+        s = ""
+
+        while cur != None:
+            s += f'({cur.value})'
+
+            if cur.next is not None:
+                s += '-->'
+
+            cur = cur.next
+
+        return s
+    
+    def find(self, key):
+        cur = self.head
+        while cur is not None:
+            if cur.key == key:
+                return cur
+            cur = cur.next
+        return None
+
+    def delete(self, value):
+        cur = self.head
+
+        # Special case of deleting head
+        if cur.value == value:
+            self.head = cur.next
+            return cur
+
+        # General case of detecting internal node
+        prev = cur
+        cur = cur.next
+
+        while cur is not None:
+            if cur.value == value: # Found it!
+                prev.next = cur.next # Cut it out
+                cur.next = None
+                return cur # Return deleted node
+            else:
+                prev = cur
+                cur = cur.next
+        
+        return None # If we get here, nothing found
+
+    def insert_at_head(self, node):
+        n = Node(value)
+        n.next = self.head
+        self.head = n
+
+    def insert_or_overwrite_value(self, value):
+        node = self.find(value)
+
+        if node is None:
+            # Make a new node
+            self.insert_at_head(HashTableEntry(node.key, node.value))
+
+        else:
+            # Overwrite old value
+            node.value = value
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -7,6 +81,8 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
+    def __repr__(self):
+        return f'Node({repr(self.value)})'
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
@@ -20,9 +96,9 @@ class HashTable:
     """
 
     def __init__(self, capacity):
-        # Your code here
         self.capacity = MIN_CAPACITY
-        self.hash_table = [None] * self.capacity 
+        self.hash_table = [None] * self.capacity
+        self.count = 0
 
 
     def get_num_slots(self):
@@ -35,7 +111,6 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
         return len(self.hash_table)
 
 
@@ -45,7 +120,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        return self.count / self.get_num_slots()
 
 
     def fnv1(self, key):
@@ -92,10 +167,35 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-        index = self.hash_index(key)
-        self.hash_table[index] = value
 
+        index = self.hash_index(key)
+        cur = self.hash_table[index]
+
+        # Base Case - Head node is None
+        if self.hash_table[index] is None:
+            self.hash_table[index] = HashTableEntry(key, value)
+            self.count += 1
+            if self.get_load_factor() > 0.7:
+                self.resize(self.get_num_slots() * 2)
+            return cur
+
+        # Overwrite case
+        while cur is not None:
+            if cur.key == key:
+                cur.value = value
+                if self.get_load_factor() > 0.7:
+                    self.resize(self.get_num_slots() * 2)
+                return cur
+            cur = cur.next
+        
+        # General inserts at case
+        copy = self.hash_table[index]
+        self.hash_table[index] = HashTableEntry(key, value)
+        self.hash_table[index].next = copy
+        self.count += 1
+
+        if self.get_load_factor() > 0.7:
+            self.resize(self.get_num_slots() * 2)
 
     def delete(self, key):
         """
@@ -105,12 +205,31 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-        if self.hash_index(key) is None:
-            print("Key not found")
-        else:
-            hash = self.hash_index(key)
-            self.hash_table[hash] = None
+        index = self.hash_index(key)
+        cur = self.hash_table[index]
+
+        # Special case of empty head
+        if cur is None:
+            return None
+
+        # Special case of deleting head
+        if cur.key == key:
+            self.hash_table[index] = cur.next
+            return cur
+        
+        # General case of detecting internal node
+        prev = cur
+        cur = cur.next
+
+        while cur is not None:
+            if cur.key == key: # Found it!
+                prev.next = cur.next # Cut it out
+                return cur # Return deleted node
+            else:
+                prev = cur
+                cur = cur.next
+        
+        return None # If we get here, nothing found
 
 
     def get(self, key):
@@ -121,13 +240,15 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-        if self.hash_index(key) is None:
-            return None
-        else:
-            index = self.hash_index(key)
-            return self.hash_table[index]
+            
+        index = self.hash_index(key)
+        cur = self.hash_table[index]
 
+        while cur is not None:
+            if cur.key == key:
+                return cur.value
+            cur = cur.next
+        return None
 
     def resize(self, new_capacity):
         """
@@ -136,9 +257,16 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-        # self.capacity = new_capacity
-        # new_hash_table = [None] * new_capacity
+        old_table = self.hash_table
+        self.capacity = new_capacity
+        self.hash_table = [None] * new_capacity
+        self.count = 0
+        for i in old_table:
+            if i is not None:
+                cur = i
+                while cur is not None:
+                    self.put(cur.key, cur.value)
+                    cur = cur.next
         
 
 
