@@ -1,5 +1,26 @@
+import string
+
 def word_count(s):
-    # Your code here
+    d = {}
+    punctuation = '\":;,.-+=/\\|[]\{\}()*^&'
+
+    # remove all punctuation from string
+    no_punct = ""
+    for char in s:
+        if char not in punctuation:
+            no_punct = no_punct + char
+
+    # make all characters lowercase, split words by spaces, and put words into a list
+    words = no_punct.lower().split()
+
+    # count each word and add it to dictionary
+    for w in words:
+        if w not in d:
+            d[w] = 0
+        
+        d[w] += 1
+
+    return d
 
 
 
