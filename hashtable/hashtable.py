@@ -3,6 +3,8 @@ class LinkedList:
         self.head = None
 
     def __str__(self):
+        """Print entire linked list."""
+
         if self.head is None:
             return "[Empty List]"
 
@@ -18,48 +20,52 @@ class LinkedList:
             cur = cur.next
 
         return s
-    
-    def find(self, key):
+
+    def find(self, value):
         cur = self.head
+
         while cur is not None:
-            if cur.key == key:
+            if cur.value == value:
                 return cur
+
             cur = cur.next
+
         return None
 
     def delete(self, value):
         cur = self.head
 
         # Special case of deleting head
+
         if cur.value == value:
             self.head = cur.next
             return cur
 
         # General case of deleting internal node
+
         prev = cur
         cur = cur.next
 
         while cur is not None:
-            if cur.value == value: # Found it!
-                prev.next = cur.next # Cut it out
-                return cur # Return deleted node
+            if cur.value == value:  # Found it!
+                prev.next = cur.next   # Cut it out
+                return cur  # Return deleted node
             else:
                 prev = cur
                 cur = cur.next
-        
-        return None # If we get here, nothing found
+
+        return None  # If we got here, nothing found
 
     def insert_at_head(self, node):
-        n = HashTableEntry(value)
-        n.next = self.head
-        self.head = n
+        node.next = self.head
+        self.head = node
 
     def insert_or_overwrite_value(self, value):
         node = self.find(value)
 
         if node is None:
             # Make a new node
-            self.insert_at_head(HashTableEntry(node.key, node.value))
+            self.insert_at_head(Node(value))
 
         else:
             # Overwrite old value
