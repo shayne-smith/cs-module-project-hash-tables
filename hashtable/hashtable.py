@@ -1,9 +1,3 @@
-class Node:
-    def __init__(self, key, value):
-        self.key = key
-        self.value = value
-        self.next = None
-
 class LinkedList:
     def __init__(self):
         self.head = None
@@ -41,14 +35,13 @@ class LinkedList:
             self.head = cur.next
             return cur
 
-        # General case of detecting internal node
+        # General case of deleting internal node
         prev = cur
         cur = cur.next
 
         while cur is not None:
             if cur.value == value: # Found it!
                 prev.next = cur.next # Cut it out
-                cur.next = None
                 return cur # Return deleted node
             else:
                 prev = cur
@@ -57,7 +50,7 @@ class LinkedList:
         return None # If we get here, nothing found
 
     def insert_at_head(self, node):
-        n = Node(value)
+        n = HashTableEntry(value)
         n.next = self.head
         self.head = n
 
@@ -172,17 +165,21 @@ class HashTable:
         cur = self.hash_table[index]
 
         # Base Case - Head node is None
-        if self.hash_table[index] is None:
+        if cur is None:
             self.hash_table[index] = HashTableEntry(key, value)
             self.count += 1
+
+            # check if hash table resize is required
             if self.get_load_factor() > 0.7:
                 self.resize(self.get_num_slots() * 2)
             return cur
 
-        # Overwrite case
+        # Overwrite existing node
         while cur is not None:
             if cur.key == key:
                 cur.value = value
+
+                # check if hash table resize is required
                 if self.get_load_factor() > 0.7:
                     self.resize(self.get_num_slots() * 2)
                 return cur
