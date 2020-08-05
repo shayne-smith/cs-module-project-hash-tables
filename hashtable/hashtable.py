@@ -171,7 +171,7 @@ class HashTable:
         index = self.hash_index(key)
         cur = self.hash_table[index]
 
-        # Base Case - Head node is None
+        # Special case - Head node is None
         if cur is None:
             self.hash_table[index] = HashTableEntry(key, value)
             self.count += 1
@@ -181,7 +181,7 @@ class HashTable:
                 self.resize(self.get_num_slots() * 2)
             return cur
 
-        # Overwrite existing node if the key is already present
+        # Special case - Overwrite existing node if the key is already present
         while cur is not None:
             if cur.key == key:
                 cur.value = value
@@ -316,7 +316,7 @@ if __name__ == "__main__":
 
     print(ht.get_num_slots())
     print("")
-    print(ht.hash_table)
+    # print(ht.hash_table)
 
     # old_capacity = ht.get_num_slots()
     # print(int(ht.capacity * 0.25))
