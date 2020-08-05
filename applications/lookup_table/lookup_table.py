@@ -18,15 +18,10 @@ def slowfun(x, y):
     """
     if (x, y) in d:
         return d[(x, y)]
-
-    v = math.pow(x, y)
-    v = math.factorial(v)
-    v //= (x + y)
-    v %= 982451653
     
-    d[(x, y)] = v
+    d[(x, y)] = slowfun_too_slow(x, y)
 
-    return v
+    return d[(x, y)]
 
 
 
