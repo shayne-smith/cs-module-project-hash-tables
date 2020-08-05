@@ -167,6 +167,7 @@ class HashTable:
         Implement this.
         """
 
+        # find index
         index = self.hash_index(key)
         cur = self.hash_table[index]
 
@@ -180,7 +181,7 @@ class HashTable:
                 self.resize(self.get_num_slots() * 2)
             return cur
 
-        # Overwrite existing node
+        # Overwrite existing node if the key is already present
         while cur is not None:
             if cur.key == key:
                 cur.value = value
@@ -191,7 +192,7 @@ class HashTable:
                 return cur
             cur = cur.next
         
-        # General inserts at case
+        # General inserts into list case
         copy = self.hash_table[index]
         self.hash_table[index] = HashTableEntry(key, value)
         self.hash_table[index].next = copy
@@ -208,6 +209,8 @@ class HashTable:
 
         Implement this.
         """
+
+        # find index
         index = self.hash_index(key)
         cur = self.hash_table[index]
 
@@ -244,6 +247,7 @@ class HashTable:
         Implement this.
         """
             
+        # find index
         index = self.hash_index(key)
         cur = self.hash_table[index]
 
