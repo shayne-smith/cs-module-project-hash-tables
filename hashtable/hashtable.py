@@ -230,6 +230,10 @@ class HashTable:
         while cur is not None:
             if cur.key == key: # Found it!
                 prev.next = cur.next # Cut it out
+
+                if self.get_load_factor() < 0.2:
+                    self.resize(self.get_num_slots() * 0.5)
+
                 return cur # Return deleted node
             else:
                 prev = cur
@@ -264,22 +268,19 @@ class HashTable:
 
         Implement this.
         """
-        old_table = self.hash_table
-        self.capacity = new_capacity
-        self.hash_table = [None] * new_capacity
-        self.count = 0
-        for i in old_table:
-            if i is not None:
-                cur = i
-                while cur is not None:
-                    self.put(cur.key, cur.value)
-                    cur = cur.next
+        if new_capacity >= MIN_CAPACITY:
+            old_table = self.hash_table
+            self.capacity = new_capacity
+            self.hash_table = [None] * new_capacity
+            self.count = 0
+            for i in old_table:
+                if i is not None:
+                    cur = i
+                    while cur is not None:
+                        self.put(cur.key, cur.value)
+                        cur = cur.next
         
-
-
-
-
-
+         
 if __name__ == "__main__":
     ht = HashTable(8)
 
@@ -313,4 +314,15 @@ if __name__ == "__main__":
     for i in range(1, 13):
         print(ht.get(f"line_{i}"))
 
+    print(ht.get_num_slots())
     print("")
+    print(ht.hash_table)
+
+    # old_capacity = ht.get_num_slots()
+    # print(int(ht.capacity * 0.25))
+    # ht.resize(int(ht.capacity * 0.5))
+    # ht.resize(int(ht.capacity * 0.5))
+    # ht.resize(int(ht.capacity * 0.5))
+    # new_capacity = ht.get_num_slots()
+
+    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
