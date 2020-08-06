@@ -23,7 +23,7 @@ def build_sentence():
         start = random.choice(list(lookup_table.keys()))
 
     # print start word
-    print(start)
+    print(start, end=" ")
 
     next_word = random.choice(lookup_table[start])
 
@@ -34,10 +34,10 @@ def build_sentence():
             if next_word[-2] == "." or next_word[-2] == "?" or next_word[-2] == "!":
                 break
         
-        print(next_word)
+        print(next_word, end=" ")
         next_word = random.choice(lookup_table[next_word])
 
-    print(next_word)
+    print(next_word, end=" ")
 
 
 # Read in all the words in one go
