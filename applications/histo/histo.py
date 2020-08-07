@@ -16,7 +16,7 @@ def build_dictionaries(words):
             count_word[count] = []
         count_word[count].append(word)
 
-
+def print_counts():
     for i in sorted(count_word, reverse=True):
 
         # handle case where only 1 word has a particular count
@@ -50,5 +50,9 @@ for char in s:
 
 # make string lowercase, split string into words, and place words in a list
 words = no_punct.lower().split()
-build_dictionaries(words)  
+build_dictionaries(words)
+
+print(word_count)
+
+# print_counts() 
 
